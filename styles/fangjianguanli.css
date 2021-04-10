@@ -1,0 +1,35 @@
+/*.powder{*/
+/*    padding-left: 50px;*/
+/*    padding-right: 50px;*/
+/*    right: 50px;*/
+/*    padding-top: 5%;*/
+/*    width: 70%;*/
+/*    margin: auto;*/
+/*}*/
+.layui-body{
+    padding: 50px 50px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.layui-input{
+    width: 200px;
+}
+#layui-btu{
+    float: right;
+    right: 50px;
+}
+.alert{
+    padding-left: 50px;
+    padding-right: 50px;
+    display: none;
+}
+.editroom{
+    padding-left: 50px;
+    padding-right: 50px;
+    display: none;
+}
+.col{
+    width: 0px;
+    display: none;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入住房间管理</title>
+
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css" >
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../styles/stayRoom.css" >
+
+</head>
+<body >
+
+<div  class="header">
+    <div class="biaokuang">
+        <ul>
+            <form>
+                <input type="text" name="roomNumber"  class="biaoti RoomNum" placeholder="房号">
+                <input type="text" name="roomType"  class="biaoti RoomType" placeholder="房间类型">
+                <input type="text" name="shijian"  class="biaoti2 RoomTime" id="test1"  placeholder="时间">
+                <button type="button" class="layui-btn btn_search"  style="position: relative;top: 0;right: 0">查询</button>
+            </form>
+        </ul>
+    </div>
+
+    <hr class="layui-bg-gray">
+    <table class="layui-table">
+        <colgroup>
+            <col width="100">
+            <col width="200">
+            <col width="200">
+            <col width="100">
+            <col width="100">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>房号</th>
+            <th>房间类型</th>
+            <th>入住时间</th>
+            <th>入住人</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="tbody">
+        
+        </tbody>
+    </table>
+<!--    分页-->
+    <div class="page">
+        <ul id="oUl">
+<!--            <li><a href="#">1</a></li>-->
+<!--            <li><a href="#">2</a></li>-->
+        </ul>
+    </div>
+</div>
+<!--弹框-->
+<div  class="alertTwo" style="display: none" align="center" >
+
+</div>
+</body>
+</html>
+<script src="../utils/lib/layui/layui.js"></script>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script>
+
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+            , range: true
+        });
+    });
+    var layer;
+    layui.use('layer', function(){ //独立版的layer无需执行这一句
+        layer = layui.layer; //独立版的layer无需执行这一句
+
+    });
+    layui.use(['laypage', 'layer'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+
+        laypage.render({
+            elem: 'demo0'
+            , count: 50 //数据总数
+        });
+    })
+
+    var page=1
+    var count=5
+    // 渲染页面
+    function updateTable() {
+        $.ajax({
+            url:'/api/intake/list/all/intakedata',
+            type: "post",
+            data:{
+                page:page,
+                size:count
+            },
+            success:res => {
+                $('.tbody').html('')
+                console.log(res)
+                // var res = JSON.parse(res)
+                for (var i=0;i<res.data.length;i++){
+                    // console.log(1111111111,res.data[i])
+                    var otr = document.createElement('tr')
+                    otr.innerHTML='<td>'+res.data[i].num+'</td>\n' +
+                        '                    <td>'+res.data[i].name+'</td>\n' +
+                        '                    <td>'+res.data[i].startTime+'</td>\n' +
+                        '                    <td>'+res.data[i].user1+'</td>\n' +
+                        '                    <td>\n' +
+                        '                        <div style="position: relative;top: 0;left: 0">\n' +
+                        '                            <form class="layui-form" action="">\n' +
+                        '                                <button type="button" data-id="'+res.data[i].id+'" class="layui-btn detail" style="margin-left: 30px">详情</button>\n' +
+                        '                            </form>\n' +
+                        '                        </div>\n' +
+                        '                    </td>'
+                    $('.tbody').append(otr)
+                }
+
+                // 分页
+                var pageSum = res.pageInfo.total
+                console.log(pageSum)
+                $('#oUl').html('')
+                for (var i=0;i<Math.ceil(pageSum/count);i++){
+                    var oLi = document.createElement('li')
+                    oLi.className = 'editOli'
+                    oLi.innerHTML = '<a href="#" class="hf">'+(i+1)+'</a>'
+                    $('#oUl').append(oLi)
+                    $('.editOli').on('click','.hf',function () {
+                        console.log(this.innerHTML)
+                        page = this.innerHTML
+                        updateTable();
+                    })
+                }
+            }
+        })
+    }
+    updateTable()
+
+    $('.tbody').on('click','.detail',function () {
+        $('.alertTwo').html('')
+        $.ajax({
+            url:'/api/intake/findByCheckId',
+            type:'post',
+            data:{
+                CheckId: $(this).attr('data-id')
+            },
+            success:result=>{
+                console.log(result)
+                var oDiv = document.createElement('div')
+                oDiv.className = 'update'
+                oDiv.innerHTML =
+                    '    <h1 align="center">登记详情</h1><br><br><br>\n' +
+                    '<form>\n' +
+                    '      <tit >房间号</tit>\n' +
+                    '      <input type="text" value="'+result.data[0].num+'">\n' +
+                    '      <tit >入住时间</tit>\n' +
+                    '      <input type="text" value="'+result.data[0].startTime+'">\n' +
+                    '  </form>\n' +
+                    '  <form style="margin-top: 20px"\n' +
+                    '      <tit style=" font-size: 15px;margin-right: 127px;">入住人员信息:</tit>\n' +
+                    '      <tit class="xinming">姓名:</tit><input type="text" value="'+result.data[0].user1+'"><br><br><br>\n' +
+                    '      <tit >身份证号:</tit><input type="text" value="'+result.data[0].user1Id+'">\n' +
+                    '      <tit >手机号:</tit><input type="text" value="'+result.data[0].tel+'"><br><br><br>\n' +
+                    '  </form>'
+                $('.alertTwo').append(oDiv)
+            }
+        })
+        layer.open({
+            title:'详情',
+            type: 1,
+            content:$('.alertTwo'),
+            area: ['500px', '400px'],
+            btn: ['确定'],
+            yes: (index, layero) => {
+                layer.close(index);
+            }
+        })
+    })
+
+// 查询
+$('.btn_search').click(() => {
+    var RoomNum = $('.RoomNum').val()
+    var RoomType = $('.RoomType').val()
+    var RoomTime = $('.RoomTime').val()
+    console.log(RoomNum,RoomType,RoomTime)
+    $('.tbody').html('')
+    $.ajax({
+        url:'/api/intake/findByCheck',
+        type: "post",  //请求方式get  post
+        data:{
+            num:RoomNum,
+            name:RoomType,
+            timeString:RoomTime,
+            page:page,
+            size:count
+        },
+        success:res => {
+            console.log(res)
+            for (var i=0;res.data.length;i++){
+                var otr = document.createElement('tr')
+                otr.innerHTML='<td>'+res.data[i].num+'</td>\n' +
+                    '                    <td>'+res.data[i].name+'</td>\n' +
+                    '                    <td>'+res.data[i].startTime+'</td>\n' +
+                    '                    <td>'+res.data[i].user1+'</td>\n' +
+                    '                    <td>\n' +
+                    '                        <div style="position: relative;top: 0;left: 0">\n' +
+                    '                            <form class="layui-form" action="">\n' +
+                    '                                <button type="button" data-id="'+res.data[i].id+'" class="layui-btn detail" style="margin-left: 30px">详情</button>\n' +
+                    '                            </form>\n' +
+                    '                        </div>\n' +
+                    '                    </td>'
+                $('.tbody').append(otr)
+            }
+        }
+    })
+})
+</script>

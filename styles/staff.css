@@ -1,0 +1,11 @@
+.layui-body{
+    padding: 50px 50px;
+    position: absolute;
+    left: 0px;
+    top: 25px;
+}
+#addBtn {
+    position: absolute;
+    right: 100px;
+    top: 15px;
+}

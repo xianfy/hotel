@@ -1,0 +1,47 @@
+.layui-body{
+    padding: 50px 50px;
+    position: absolute;
+    left: 0px;
+    top: 25px;
+}
+.power>button {
+    position: relative;
+    top: 0;
+    left: 700px;
+    margin-bottom: 20px;
+    width: 100px;
+}
+#addBtn {
+    position: absolute;
+    right: 90px;
+    top:15px
+}
+/*分页*/
+.page{
+    margin-top: 20px;
+    text-align: center;
+
+}
+.page a{
+    display: inline-block;
+    background: #fff 0 0 no-repeat;
+    color: #888;
+    padding: 10px;
+    min-width: 15px;
+    border: 1px solid #E2E2E2;
+
+}
+.page li{
+    /*display: inline-block;*/
+    /*float: left;*/
+    margin-right: 5px;
+    text-align: center;
+}
+#oUl li {
+    float: left;
+    margin: 0 auto;
+}
+.alert,.addalert{
+    padding-right: 50px;
+    padding-top: 50px;
+}

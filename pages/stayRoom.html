@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入住房间管理</title>
+
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css" >
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../styles/stayRoom.css" >
+    <link rel="stylesheet" href="../styles/index.css">
+
+</head>
+<body>
+
+
+<div class='header'>
+      <div class="biaokuang" >
+            <form class="layui-form " action="" style="position: relative;top: 0;left: 0">
+                <input type="text"  class='biaoti nowNum' placeholder="房号">
+                <input type="text"  class='biaoti nowType' placeholder="房间类型">
+                <div class="layui-form-item selectAll"  style="margin-bottom: 0; width: 300px;height:35px;position: absolute;bottom: 0;left: 275px">
+                    <div class="layui-input-block">
+                        <select name="interest" lay-filter="aihao" class="select">
+                            <option value="0">已入住</option>
+                            <option value="1" >已预约</option>
+                            <option value="2">空闲中</option>
+                            <option value="" selected="">全部房间</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="text" class="biaoti2 test1 nowTime" value="" placeholder="输入时间" style="width: 200px;height: 30px;;color: #666666;position: absolute;bottom: 0;left: 615px">
+                <button type="button" class="layui-btn btn_search" style="position: absolute;bottom: 0px;right:450px">查询</button>
+            </form>
+      </div>
+
+    <hr class="layui-bg-gray">
+    <table class="layui-table">
+        <colgroup>
+            <col width="100">
+            <col width="100">
+            <col width="200">
+            <col width="200">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>房号</th>
+            <th>房间类型</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="tbody">
+<!--        <tr>-->
+<!--            <td>102</td>-->
+<!--            <td>大床房</td>-->
+<!--            <td>-->
+<!--                <span class="oSpan">XXX</span>-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <button type="button" class="layui-btn update"  data-method="confirmTrans" style="display: none">更换</button>-->
+<!--                <button type="button" class="layui-btn postpone"  data-method="confirmTrans" style="display: none">延期</button>-->
+<!--                <button type="button" class="layui-btn write"  data-method="confirmTrans" style="display: none">登记</button>-->
+<!--                <button type="button" class="layui-btn reserve"  data-method="confirmTrans" style="display: none">预订</button>-->
+<!--                <button type="button" class="layui-btn goRoom"  data-method="confirmTrans" style="display: none">入住</button>-->
+<!--                <button type="button" class="layui-btn cancel"  data-method="confirmTrans" style="display: none">取消</button>-->
+<!--            </td>-->
+<!--        </tr>-->
+        </tbody>
+    </table>
+    <!--    分页-->
+    <div class="page">
+        <ul id="oUl">
+            <!--            <li><a href="#">1</a></li>-->
+            <!--            <li><a href="#">2</a></li>-->
+        </ul>
+    </div>
+</div>
+
+<div  class="alert" style="display: none" align="center" >
+    <div class="alertAll">
+<form style="margin-top: 30px">
+    <tit style=" font-size: 15px;">入住人员信息:</tit><br><br><br>
+    <tit >房间号</tit>
+    <input type="text" class="roomNum">
+    <tit >入住时间</tit>
+    <input type="text" class="enterTime test2" value="时间" placeholder="输入时间" >
+</form>
+    <form style="margin-top: 20px">
+        <tit class="xinming">姓名:</tit><input type="text" class="uesrName"><br><br><br>
+        <tit >身份证号:</tit><input type="text" class="userNum"><br><br><br>
+        <tit >手机号:</tit><input type="text" class="userTel"><br><br><br>
+    </form>
+    </div>
+</div>
+
+</body>
+</html>
+<script src="../utils/lib/layui/layui.js" ></script>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script>
+
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '.test2' //指定元素
+            , range: true
+        });
+        laydate.render({
+            elem: '.test1' //指定元素
+            , range: true
+        });
+    });
+    var layer;
+    layui.use('layer', function(){ //独立版的layer无需执行这一句
+        layer = layui.layer; //独立版的layer无需执行这一句
+
+    });
+    layui.use(['laypage', 'layer'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        laypage.render({
+            elem: 'demo0'
+            , count: 50 //数据总数
+        });
+    })
+
+    layui.use('form', function(){
+        var form = layui.form;
+//监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+        form.on('select(filter)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            console.log(data.elem[data.elem.select].dataset.idx);
+            console.log(data.elem[data.elem.selectedIndex].text);
+        });
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+
+
+    var page =1
+    var count=5
+    function changeState(num){
+        if(num===0){
+            return '已入住'
+        }else if(num===1){
+            return '已预约'
+        }else if(num===2){
+            return '空闲中'
+        }
+    }
+    // 渲染页面方法
+    function updateStayRoom() {
+         $('.enterTime').val('')
+         $('.uesrName').val('')
+         $('.userNum').val('')
+         $('.userTel').val('')
+        $.ajax({
+            url:'/Api/intake/list/all/roomnumlist',
+            type: "post",
+            data:{
+                page:page,
+                size:count
+            },
+            success:res => {
+                $('.tbody').html('')
+                console.log(res)
+                // var res = JSON.parse(res)
+                for (let i=0;i<res.data.length;i++){
+                    // console.log(1111111111,res.data[i])
+
+                    let otr = document.createElement('tr')
+                    otr.innerHTML=`
+                        <td>${res.data[i].num}</td>
+                        <td>${res.data[i].name}</td>
+                        <td>
+                            <span class="oSpan">${changeState(res.data[i].state)}</span>
+                        </td>
+                        <td>
+                            <button type="button" class="layui-btn update"  data-method="confirmTrans" style=" display: ${res.data[i].state==0? "inline-block" : "none"}" data-id="${res.data[i].id}">更换</button>
+                            <button type="button" class="layui-btn postpone"  data-method="confirmTrans" style="display: ${res.data[i].state==0? "inline-block" : "none"}" data-id="${res.data[i].id}">退房</button>
+                            <button type="button" class="layui-btn write"  data-method="confirmTrans" style="display: ${res.data[i].state==2? "inline-block" : "none"}" data-id="${res.data[i].id}">登记</button>
+                            <button type="button" class="layui-btn reserve"  data-method="confirmTrans" style="display: ${res.data[i].state==2? "inline-block" : "none"}" data-id="${res.data[i].id}">预订</button>
+                            <button type="button" class="layui-btn goRoom"  data-method="confirmTrans" style="display: ${res.data[i].state==1? "inline-block" : "none"}" data-id="${res.data[i].id}">入住</button>
+                            <button type="button" class="layui-btn cancel"  data-method="confirmTrans" style="display: ${res.data[i].state==1? "inline-block" : "none"}" data-id="${res.data[i].id}">取消</button>
+                        </td>`
+                    $('.tbody').append(otr)
+
+                }
+
+                // 分页
+                var pageSum = res.pageInfo.total
+                console.log(pageSum)
+                $('#oUl').html('')
+                for (var i=0;i<Math.ceil(pageSum/count);i++){
+                    var oLi = document.createElement('li')
+                    oLi.className = 'editOli'
+                    oLi.innerHTML = '<a href="#" class="hf">'+(i+1)+'</a>'
+                    $('#oUl').append(oLi)
+                    $('.editOli').on('click','.hf',function () {
+                        console.log(this.innerHTML)
+                        page = this.innerHTML
+                        updateStayRoom();
+                    })
+                }
+            }
+        })
+    }
+    updateStayRoom()
+
+    // 更换
+    $('.tbody').on('click','.update',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        $.ajax({
+            url:'/api/intake/findByRoomNumId',
+            type:'post',
+            data:{
+                RoomNumId:id
+            },
+            success:res=>{
+                console.log(res)
+                $('.roomNum').val(res.data[0].num)
+        layer.open({
+            title:'更新',
+            type: 1,
+            content:$('.alert'),
+            area: ['500px', '400px'],
+            btn: ['确定'],
+            yes: (index, layero) => {
+                var enterTime = $('.enterTime').val()
+                var uesrName = $('.uesrName').val()
+                var userNum = $('.userNum').val()
+                var userTel = $('.userTel').val()
+                console.log(enterTime)
+                console.log(uesrName)
+                console.log(userNum)
+                console.log(userTel)
+                $.ajax({
+                    url:'/api/intake/check/update',
+                    type:'post',
+                    data:{
+                        roomNumId:id,
+                        userName:uesrName,
+                        userId: userNum,
+                        timeString: enterTime,
+                        tel:userTel
+                    },
+                    success:res => {
+                        console.log(res)
+                        if (res.code==200){
+                            updateStayRoom()
+                        }
+                    }
+                })
+                layer.close(index);
+                    }
+                })
+            }
+        })
+    })
+    // 退房
+    $('.tbody').on('click','.postpone',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        //询问框
+        layer.confirm('您确定要退房吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function () {
+            $.ajax({
+                url:'/api/intake/check/delete',
+                type:'post',
+                data:{
+                    roomNumId:id,
+                },
+                success:res => {
+                    console.log(res)
+                    if (res.code==200){
+                        updateStayRoom()
+                    }
+                }
+            })
+            layer.msg('退房成功', {
+                time: 20000, //20s后自动关闭
+                btn: ['确定']
+            });
+        });
+    })
+    // 入住 goRoom
+    $('.tbody').on('click','.goRoom',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        //询问框
+        layer.confirm('您确定要入住吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function () {
+            $.ajax({
+                url:'/api/intake/check/reserve/intake',
+                type:'post',
+                data:{
+                    roomNumId:id,
+                },
+                success:res => {
+                    console.log(res)
+                    if (res.code==200){
+                        updateStayRoom()
+                    }
+                }
+            })
+            layer.msg('欢迎您大帅哥!!!', {
+                time: 20000, //20s后自动关闭
+                btn: ['确定']
+            });
+        });
+    })
+    // 取消
+    $('.tbody').on('click','.cancel',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        //询问框
+        layer.confirm('您确定要取消预约吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function () {
+            $.ajax({
+                url:'/api/intake/check/delete',
+                type:'post',
+                data:{
+                    roomNumId:id,
+                },
+                success:res => {
+                    console.log(res)
+                    if (res.code==200){
+                        updateStayRoom()
+                    }
+                }
+            })
+            layer.msg('取消成功', {
+                time: 20000, //20s后自动关闭
+                btn: ['确定']
+            });
+        });
+    })
+    // 预定
+    $('.tbody').on('click','.reserve',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        $.ajax({
+            url:'/api/intake/findByRoomNumId',
+            type:'post',
+            data:{
+                RoomNumId:id
+            },
+            success:res=>{
+                console.log(res)
+                $('.roomNum').val(res.data[0].num)
+                layer.open({
+                    title:'预定',
+                    type: 1,
+                    content:$('.alert'),
+                    area: ['500px', '400px'],
+                    btn: ['确定'],
+                    yes: (index, layero) => {
+                        var enterTime = $('.enterTime').val()
+                        var uesrName = $('.uesrName').val()
+                        var userNum = $('.userNum').val()
+                        var userTel = $('.userTel').val()
+                        // console.log(id)
+                        // console.log(roomNum)
+                        console.log(enterTime)
+                        console.log(uesrName)
+                        console.log(userNum)
+                        console.log(userTel)
+                        //
+                        // console.log()
+                        $.ajax({
+                            url:'/api/intake/check/reserve',
+                            type:'post',
+                            data:{
+                                roomNumId:id,
+                                userName:uesrName,
+                                userId: userNum,
+                                timeString: enterTime,
+                                tel:userTel
+                            },
+                            success:res => {
+                                console.log(res)
+                                if (res.code==200){
+                                    updateStayRoom()
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    }
+                })
+            }
+        })
+    })
+    // 登记
+    $('.tbody').on('click','.write',function () {
+        var id = $(this).attr('data-id')
+        console.log(id)
+        $.ajax({
+            url:'/api/intake/findByRoomNumId',
+            type:'post',
+            data:{
+                RoomNumId:id
+            },
+            success:res=>{
+                console.log(res)
+                $('.roomNum').val(res.data[0].num)
+                layer.open({
+                    title:'登记',
+                    type: 1,
+                    content:$('.alert'),
+                    area: ['500px', '400px'],
+                    btn: ['确定'],
+                    yes: (index, layero) => {
+                        var enterTime = $('.enterTime').val()
+                        var uesrName = $('.uesrName').val()
+                        var userNum = $('.userNum').val()
+                        var userTel = $('.userTel').val()
+                        console.log(enterTime)
+                        console.log(uesrName)
+                        console.log(userNum)
+                        console.log(userTel)
+                        $.ajax({
+                            url:'/api/intake/insertCheck',
+                            type:'post',
+                            data:{
+                                roomNumId:id,
+                                userName:uesrName,
+                                userId: userNum,
+                                timeString: enterTime,
+                                tel:userTel
+                            },
+                            success:res => {
+                                console.log(res)
+                                if (res.code==200){
+                                    updateStayRoom()
+                                }
+                            }
+                        })
+                        layer.close(index);
+                    }
+                })
+            }
+        })
+    })
+
+    // 查询
+    $('.btn_search').click(() => {
+        var RoomNum = $('.nowNum').val()
+        var RoomType = $('.nowType').val()
+        var RoomTime = $('.nowTime').val()
+        var selected = $(".select option:checked").val()
+        // console.log(RoomNum,RoomType,RoomTime,selected)
+        // $('.tbody').html('')
+        $.ajax({
+            url:'/api/intake/findByRoomNum',
+            type: "post",  //请求方式get  post
+            data:{
+                num:RoomNum,
+                name:RoomType,
+                timeString:RoomTime,
+                state:selected,
+                page:page,
+                size:count
+            },
+            success:res => {
+                $('.tbody').html('')
+                console.log(res)
+                for (var i=0;i<res.data.length;i++){
+                    let otr = document.createElement('tr')
+                    otr.innerHTML=`
+                        <td>${res.data[i].num}</td>
+                        <td>${res.data[i].name}</td>
+                        <td>
+                            <span class="oSpan">${changeState(res.data[i].state)}</span>
+                        </td>
+                        <td>
+                            <button type="button" class="layui-btn update"  data-method="confirmTrans" style=" display: ${res.data[i].state==0? "inline-block" : "none"}" data-id="${res.data[i].id}">更换</button>
+                            <button type="button" class="layui-btn postpone"  data-method="confirmTrans" style="display: ${res.data[i].state==0? "inline-block" : "none"}" data-id="${res.data[i].id}">退房</button>
+                            <button type="button" class="layui-btn write"  data-method="confirmTrans" style="display: ${res.data[i].state==2? "inline-block" : "none"}" data-id="${res.data[i].id}">登记</button>
+                            <button type="button" class="layui-btn reserve"  data-method="confirmTrans" style="display: ${res.data[i].state==2? "inline-block" : "none"}" data-id="${res.data[i].id}">预订</button>
+                            <button type="button" class="layui-btn goRoom"  data-method="confirmTrans" style="display: ${res.data[i].state==1? "inline-block" : "none"}" data-id="${res.data[i].id}">入住</button>
+                            <button type="button" class="layui-btn cancel"  data-method="confirmTrans" style="display: ${res.data[i].state==1? "inline-block" : "none"}" data-id="${res.data[i].id}">取消</button>
+                        </td>`
+                    $('.tbody').append(otr)
+                }
+            }
+        })
+    })
+</script>
+

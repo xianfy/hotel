@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../styles/power.css">
+    <script src="../utils/lib/layui/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="power layui-body">
+    <div class="layui-form-item">
+        <button id="addBtn" class="layui-btn layui-btn-radius">新增权限</button>
+    </div>
+    <hr class="layui-bg-gray">
+    <table class="layui-table">
+        <colgroup>
+            <col width="200">
+            <col width="300">
+            <col width="100">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>职位</th>
+            <th>权限</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="tbody">
+<!--        <tr>-->
+<!--            <td>前台</td>-->
+<!--            <td>客房管理</td>-->
+<!--            <td>-->
+<!--                <div style="position: relative;top: 0;left: 0">-->
+<!--                    <form class="layui-form" action="">-->
+<!--                        <button type="button" class="layui-btn btn" style="margin-left: 30px" data-id="1">编辑</button>-->
+<!--                        <button type="button" class="layui-btn layui-btn-danger delBtn">删除</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>经理</td>-->
+
+
+<!--            <td>客房管理,入住管理</td>-->
+<!--            <td>-->
+<!--                <div style="position: relative;top: 0;left: 0">-->
+<!--                    <form class="layui-form" action="">-->
+<!--                        <button type="button" class="layui-btn btn" style="margin-left: 30px">编辑</button>-->
+<!--                        <button type="button" class="layui-btn layui-btn-danger">删除</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+        </tbody>
+    </table>
+    <div class="page">
+        <ul id="oUl">
+<!--            <li><a href="#"></a></li>-->
+        </ul>
+    </div>
+</div>
+<!--新增  编辑-->
+<div class="alert" style="display: none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位</label>
+            <div class="layui-input-block">
+                <input id="addValue" type="text" name="title" required  lay-verify="required" placeholder="请输入职位" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">授权</label>
+            <div class="layui-input-block" >
+                <input type="checkbox" name="addPower" title="入住管理" checked=""><br>
+                <input type="checkbox" name="addPower" title="客房管理"><br>
+                <input type="checkbox" name="addPower" title="统计管理"><br>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+
+    var page=1
+    var count=5
+    // 加载渲染页面
+    function updateTable() {
+        $.ajax({
+            url: '/api/jiudian_war_exploded/power/listAll',
+            type: "post",
+            data:{
+              page:page,
+              size:count
+            },
+            success: result => {
+                var arr = JSON.parse(result).pageInfo
+                console.log(arr)
+                $('.tbody').html('')
+                for(var i=0;i<arr.list.length;i++){
+                    var otr = document.createElement('tr')
+                    otr.innerHTML = '<td>' + arr.list[i].powerName + '</td>\n' +
+                        '            <td>' + arr.list[i].power + '</td>\n' +
+                        '            <td>\n' +
+                        '                <div style="position: relative;top: 0;left: 0">\n'+
+                        '                    <form class="layui-form" action="">\n' +
+                        '                        <button type="button" class="layui-btn btn " style="margin-left: 30px" data-id="'+arr.list[i].powerId+'">编辑</button>\n' +
+                        '                        <button type="button" class="layui-btn layui-btn-danger  delBtn" data-id="'+arr.list[i].powerId+'">删除</button>\n' +
+                        '                    </form>\n' +
+                        '                </div>\n' +
+                        '            </td>'
+                    $('.tbody').append(otr)
+                }
+
+                // 分页
+                var pageSum = arr.total
+                console.log(pageSum)
+                $('#oUl').html('')
+                for (var i=0;i<Math.ceil(pageSum/count);i++){
+                    var oLi = document.createElement('li')
+                    oLi.className = 'editOli'
+                    oLi.innerHTML = '<a href="#" class="hf">'+(i+1)+'</a>'
+                    $('#oUl').append(oLi)
+                    $('.editOli').on('click','.hf',function () {
+                        console.log(this.innerHTML)
+                        page = this.innerHTML
+                        updateTable();
+                    })
+                }
+            }
+        })
+    }
+    updateTable()
+
+    // 新增 编辑 删除 ajax
+    function fn(url,data) {
+        $.ajax({
+            url: url,
+            type: "post",  //请求方式get  post
+            dataType: "json", //响应类型text  json  js html
+            data: data,
+            success: result => {
+                console.log(result)
+                if (result.res == 200) {
+                    // console.log('大帅哥!!!')
+                    updateTable()
+                }
+            }
+        })
+    }
+
+    //新增
+    $('#addBtn').click(() => {
+        layer.open({
+            title:'新增权限',
+            type: 1,
+            content:$('.alert'),
+            area: ['500px', '350px'],
+            btn: ['确定'],
+            yes:function (index, layero) {
+                // 输入框值
+                var arrPower = []
+                var input = $('#addValue').val()
+                var power = $("input[name=addPower]:checked");
+                console.log(input)
+                console.log(power)
+                for (var i=0;i<power.length;i++){
+                    arrPower.push(power[i].title)
+                }
+                console.log(arrPower.toString())
+                fn('/api/jiudian_war_exploded/power/exAdd',
+                    {
+                    powerArry: arrPower.toString(),
+                    powerName: input
+                })
+                layer.close(index);
+            }
+        })
+    })
+
+    // 编辑
+    $('.tbody').on('click','.btn',function () {
+        layer.open({
+            title:'编辑权限',
+            type: 1,
+            content:$('.alert'),
+            area: ['500px', '350px'],
+            btn: ['确定'],
+            yes: (index, layero) => {
+                // 输入框值
+                var arrPower = []
+                var input = $('#addValue').val()
+                var power = $("input[name=addPower]:checked");
+                console.log(input)
+                console.log(power)
+                for (var i=0;i<power.length;i++){
+                    arrPower.push(power[i].title)
+                }
+                console.log(arrPower.toString())
+                fn('/api/jiudian_war_exploded/power/exUpdate'
+                    ,{
+                        id: $(this).attr('data-id'),
+                        powerArry: arrPower.toString(),
+                        powerName: input
+                    }
+                )
+                layer.close(index);
+            }
+        })
+    })
+
+    //删除
+    $('.tbody').on('click','.delBtn',function () {
+        //询问框
+        layer.confirm('您确定要删除吗？', {
+            btn: ['确定','取消'] //按钮
+        }, () => {
+            fn('/api/jiudian_war_exploded/power/delete',
+                {id: $(this).attr('data-id')}
+               )
+            layer.msg('删除成功', {
+                time: 20000, //20s后自动关闭
+                btn: ['确定']
+            });
+        });
+    })
+</script>

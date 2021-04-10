@@ -1,0 +1,34 @@
+/*#day,#month{*/
+/*    width: 600px;*/
+/*    height: 400px;*/
+/*    float: left;*/
+/*}*/
+/*#roomtype{*/
+/*    width: 600px;*/
+/*    height: 400px;*/
+/*    float: right;*/
+/*}*/
+/*hr{*/
+/*    color: #007DDB;*/
+/*    size: 10px;*/
+/*}*/
+/*.one{*/
+/*    font-family: Algerian;*/
+/*    font-size: 20px;*/
+/*    margin-left: 10px;*/
+/*}*/
+/*.two{*/
+/*    font-family: Algerian;*/
+/*    font-size: 20px;*/
+
+/*}*/
+/*.three{*/
+
+/*}*/
+/*.box{*/
+/*float: right;*/
+/*}*/
+.box{
+    width: 800px;
+    height: 600px;
+}

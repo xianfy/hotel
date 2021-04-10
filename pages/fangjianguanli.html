@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>房间管理</title>
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../styles/fangjianguanli.css">
+</head>
+<body>
+<div class="powder layui-body">
+            <!-- 内容主体区域 -->
+    <div class="layui-form-item">
+        <input type="text" name="title" required  lay-verify="required" placeholder="请输入房号" autocomplete="off" class="layui-input searchInp" style="display: inline-block">
+        <button class="layui-btn layui-btn-radius searchBtn">搜索</button>
+        <button id="layui-btu" class="layui-btn layui-btn-radius addBtn" >新增房号</button>
+        </div>
+     <table class="layui-table">
+         <colgroup>
+             <col width="100" >
+             <col width="100">
+<!--             <col width="0" >-->
+             <col>
+             <col width="200">
+         </colgroup>
+         <thead>
+         <tr>
+             <th>房型名称</th>
+             <th>房号</th>
+             <th>上架/下架</th>
+             <th>操作</th>
+         </tr>
+         </thead>
+         <tbody>
+<!--         <tr>-->
+<!--             <td>大床房</td>-->
+<!--             <td>1001</td>-->
+<!--             <td>上架</td>-->
+<!--             <td>-->
+<!--                 <button type="button" class="layui-btn  editBtn">编辑</button>-->
+<!--                 <button type="button" class="layui-btn layui-btn-danger delBtn">删除</button>-->
+<!--             </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>大床房</td>-->
+<!--                    <td>1002</td>-->
+<!--                    <td>上架</td>-->
+<!--                    <td>-->
+<!--                        <button type="button" class="layui-btn  editBtn">编辑</button>-->
+<!--                        <button type="button" class="layui-btn layui-btn-danger delBtn">删除</button>-->
+<!--                    </td>-->
+<!--                </tr>-->
+         </tbody>
+     </table>
+    <div id="pageBar"></div>
+</div>
+
+<!--分页-->
+
+<!--弹框/新增-->
+<div class="alert" id="alert" style="display: none">
+    <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">房型</label>
+                <div class="layui-input-block option">
+                    <select name="style" lay-verify="required" class="addRoomName">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">房号</label>
+                <div class="layui-input-block">
+                   <input type="text" name="title" required  lay-verify="required" placeholder="请输入房号" autocomplete="off" class="layui-input addRoomId">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上/下架</label>
+                <div class="layui-input-block  roomRadio">
+                    <input type="radio" class="isuse" name="isuse" value="0" title="上架" {{d.isuse==0?'checked':''}}>
+                    <input type="radio" class="isuse" name="isuse" value="1" title="下架" {{d.isuse==0?'checked':''}}>
+<!--                    <input type="checkbox" name="isuse" lay-skin="switch" lay-text="上架|下架" value="1">-->
+                </div>
+            </div>
+        </form>
+    </div>
+<!--弹框/编辑-->
+<div id="editBox" style="display: none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">房型</label>
+            <div class="layui-input-block editOption">
+                <select name="style" lay-verify="required" class="editName">
+                    <option value=""></option>
+<!--                    <option value="0">大房床</option>-->
+<!--                    <option value="1">单人房</option>-->
+<!--                    <option value="2">双人房</option>-->
+<!--                    <option value="3">套房</option>-->
+<!--                    <option value="4">主题房间</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">房号</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入房号" autocomplete="off" class="layui-input editId">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上/下架</label>
+            <div class="layui-input-block editradio ">
+                <input type="radio" name="isuse" value="0" title="上架"  checked>
+                <input type="radio" name="isuse" value="1" title="下架" >
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+
+</html>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script src="../utils/lib/layui/layui.js"></script>
+<script src="../js/fangjianguanli.js"></script>

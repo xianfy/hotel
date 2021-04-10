@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>统计管理</title>
+    <script src="../utils/echart/echarts-master/dist/echarts.js"></script>
+    <link rel="stylesheet" href="../styles/tongjiguanli.css">
+</head>
+<body>
+
+    <div>
+        <div style="float: left">
+            <p class="one" style="display: inline-block">天价酒店今日入住率</p>
+            <div id="day" style="width: 400px;height:300px;"></div>
+        </div>
+        <div style="float: left">
+            <p class="two" style="display: inline-block">天价酒店本月入住率</p>
+            <div id="month" style="width: 400px;height:300px;"></div>
+        </div>
+    </div>
+    <div>
+        <div style="float: left" class="box">
+            <p class="three" style="display: inline-block">各房型入住率</p>
+            <div id="roomtype" style="width: 600px;height:400px;"></div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('day'));
+    var myChart1 = echarts.init(document.getElementById('month'));
+    var myChart2 = echarts.init(document.getElementById('roomtype'));
+    // 指定图表的配置项和数据
+    var option = {
+        xAxis: {
+            type: 'category',
+            data: ['1-25', '1-26', '1-27', '1-28', '1-29', '1-30', '1-31']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: [0,0,0,0,0,0,{
+                value: 0.57,
+                itemStyle: {
+                    color: '#f91000'
+                },
+            }],
+            type: 'bar'
+        }]
+    };
+    var option1 = {
+        xAxis: {
+            type: 'category',
+            data:['1-01','1-02','1-03','1-04','1-05','1-06', '1-07', '1-08', '1-09', '1-10', '1-11','1-12','1-13','1-14','1-15','1-16', '1-17', '1-18', '1-19', '1-20', '1-21','1-22','1-23','1-24','1-25','1-26', '1-27', '1-28', '1-29', '1-30', '1-31']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: [35, 58, 90, 68, 69, 48, 29,52,63,69,59,71,49,72,59,67,79,49,61,59,60,90,48,74,95,63,66,74,37,54,57],
+            type: 'line',
+            smooth: true
+        }]
+    };
+    var option2 = {
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            left: 'left',
+            align: 'right',
+            orient: 'horizontal',
+            // 控制左右距离
+            x: '0%',
+            // 控制上下距离
+            y: '0%'
+        },
+        series: [
+            {
+                name: '入住比例',
+                type: 'pie',
+                radius: '60%',
+                hoverOffset: 10,
+                startAngle: 90, //起始角度，默认90度(12点钟方向)
+                center: ['44%', '50%'],
+                hoverAnimation:false,
+                //329
+                data: [
+                    {value: 34, name: '大圆房'},
+                    {value: 43, name: '平房13%'},
+                    {value: 23, name: '平价房7%'},
+                    {value: 32, name: '青年公寓10%'},
+                    {value: 12, name: '平价出租房4%'},
+                    {value: 19, name: '圆房6%'},
+                    {value: 27, name: '天价房8%'},
+                    {value: 45, name: '桥洞房13.6%'},
+                    {value: 26, name: '高价房7.9%'},
+                    {value: 25, name: '青年大公寓7.5%'},
+                    {value: 43, name: '出租房14%'}
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, f, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+</script>

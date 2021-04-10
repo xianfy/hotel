@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+
+</head>
+    <link href="../styles/login.css" rel="stylesheet" type="text/css" />
+<!--<link rel="stylesheet" href="../utils/lib/layui//css/layui.css">-->
+<link rel="stylesheet" href="../utils/lib/layui/css/layui.css">
+<link rel="stylesheet" href="../styles/index.css">
+<script src="../utils/lib/layui/layui.js"></script>
+<body>
+<script>
+    window.onload = function () {
+        var oInp = document.getElementById('inp');
+        console.log(oInp)
+        oInp.onblur=function (){
+            if(isNaN(Number(oInp.value))){
+                alert("账号只能是手机号！")
+            }
+        }
+    }
+</script>
+<div class="box">
+    <header>天价酒店后台管理系统</header>
+<!--    <i class="layui-icon layui-icon-password">&#xe673;</i>-->
+    <div >
+        <p class="p1">账号：<input type="text" name="userTel" id="inp" /><i class="layui-icon layui-icon-friends">&#xe612;</i></p>
+        <p class="p2">密码：<input type="password" name="userPass"/><i class="layui-icon layui-icon-engine">&#xe628;</i></p>
+    </div>
+    <div>
+        <input type="button" id="btn_login" value="登录" class="blue layui-btn
+layui-btn-primary loginBtn">
+    </div>
+</div>
+</body>
+</html>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script>
+    $(function(){
+        $("#btn_login").click(function(){
+            var user_name = $("input[name=userTel]").val();
+            var user_pwd = $("input[name=userPass]").val();
+            //ajax请求后台
+            $.ajax({
+                url: "/api/login/toLogin",  //请求接口URI
+                type: "post",  //请求方式get
+                data: {userTel: user_name, userPass: user_pwd},  //传递给后台的参数
+                dataType: "json", //响应类型text  json  js html
+                success: function (response) {  //成功后的回调函数
+                    console.log(response)
+                    // if (response.code == 200) { //登录成功
+                        // // sessionStorage.setItem('user',JSON.stringify(response.data));
+                        // sessionStorage.setItem('token',response.token);
+                        // 登录验证通过，自动跳转到主页面
+                        // window.location.href = "../index.html";
+                        // }else{alert(response.msg)
+                        // }
+                        // if(response.code == 501){ //用户名称或密码有误
+                        //     alert(response.msg)
+                        // }
+                        // if(response.code == 500){ //系统出错
+                        //     //跳转页面
+                        //     alert(response.msg)
+                        // }
+                    // }
+                }
+            })
+        })
+    })
+</script>
+<!--<script src="../js/login.js"></script>-->

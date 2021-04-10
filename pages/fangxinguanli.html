@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>房型管理</title>
+    <link rel="stylesheet" href="../utils/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../styles/fangxinguanli.css">
+</head>
+<body>
+<div class="powder layui-body">
+    <div class="layui-form-item">
+        <input type="text" name="title" required  lay-verify="required" placeholder="请输入房间名称" autocomplete="off" class="layui-input searchInp" style="display: inline-block">
+        <button class="layui-btn layui-btn-radius seachBtn">搜索</button>
+        <button id="layui-btu" class="layui-btn layui-btn-radius addBtn" >新增房型</button>
+    </div>
+    <table class="layui-table">
+        <colgroup>
+            <col width="100" >
+            <col width="100">
+            <col>
+            <col width="200">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>房型名称</th>
+            <th>售价</th>
+            <th>房型介绍</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+<!--        <tr>-->
+<!--            <td>大床房</td>-->
+<!--            <td>200</td>-->
+<!--            <td>一间大床房</td>-->
+<!--            <td>-->
+<!--                <button type="button" class="layui-btn  editBtn">编辑</button>-->
+<!--                <button type="button" class="layui-btn layui-btn-danger delBtn">删除</button>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td>-->
+<!--                <button type="button" class="layui-btn  editBtn">编辑</button>-->
+<!--                <button type="button" class="layui-btn layui-btn-danger delBtn">删除</button>-->
+<!--            </td>-->
+<!--        </tr>-->
+        </tbody>
+    </table>
+    <div id="pageBar"></div>
+
+</div>
+<!--弹框/新增-->
+<div class="alert" id="alert" style="display: none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">房型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入类型名称" autocomplete="off" class="layui-input addRoomName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">售价</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入价格" autocomplete="off" class="layui-input addRoomPrice">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">房型介绍</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入内容" class="layui-textarea addRoomMsg"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--编辑-->
+<div id="editBox" style="display: none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">房型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入类型名称" autocomplete="off" class="layui-input editName">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">售价</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" required  lay-verify="required" placeholder="请输入价格" autocomplete="off" class="layui-input editPrice">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">房型介绍</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入内容" class="layui-textarea editMsg"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>
+<script src="../utils/jquery-1.12.4.js"></script>
+<script src="../utils/lib/layui/layui.js"></script>
+<script src="../js/fangxingguanli.js"></script>

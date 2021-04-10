@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="utils/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <script src="utils/lib/layui/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">酒店后台管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item">
+            <a href="index.html">我的桌面</a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">其他</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">邮件管理</a></dd>
+                <dd><a href="">消息管理</a></dd>
+            </dl>
+        </li>
+    </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="images/hotel.jpg" class="layui-nav-img">
+                    admin
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="pages/login.html">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item ">
+                    <a class="layui-nav-itemed" href="javascript:;" >客房管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="pages/fangjianguanli.html" target="rightcontent">房间管理</a></dd>
+                        <dd><a href="pages/fangxinguanli.html" target="rightcontent">房型管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">入住管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="pages/stayDtails.html" target="rightcontent">入住详情</a></dd>
+                        <dd><a href="pages/stayRoom.html" target="rightcontent">房间管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="pages/power.html" target="rightcontent">权限管理</a></li>
+                <li class="layui-nav-item"><a href="pages/staff.html" target="rightcontent">员工管理</a></li>
+                <li class="layui-nav-item"><a href="pages/tongjiguanli.html" target="rightcontent">统计管理</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+<!--        //主题区域-->
+        <ul class="layui-tab-title">
+            <li class="home"><i class="layui-icon">&#xe68e; &#xe689;</i>我的桌面</li>
+        </ul>
+        <div>
+            <iframe src="pages/welcome.html" frameborder="0" width="100%" height="695px" scrolling="no" name="rightcontent" marginheight="0" marginwidth="0"></iframe>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+       酒店管理系统 合作伙伴啦啦啦啦
+    </div>
+</div>
+<script>
+    //JavaScript代码区域
+    //控制左侧下拉菜单
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+</script>
+</body>
+</html>

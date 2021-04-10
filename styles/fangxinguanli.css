@@ -1,0 +1,27 @@
+.layui-body{
+    padding: 50px 50px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+.ayui-form-item{
+    padding-top: 10%;
+    width: 70%;
+}
+
+
+.layui-input{
+    width: 200px;
+}
+#layui-btu{
+    float: right;
+    right: 50px;
+
+}
+
+.alert,#editBox{
+    padding-left: 50px;
+    padding-right: 50px;
+    display: none;
+}
+

@@ -1,0 +1,96 @@
+.biaoti2{
+    /*font-weight:800;*/
+    /*font-size: 14px;*/
+    height:25px;
+    width:85px;
+    margin-right: 20px;
+    /*border-radius: 10px;*/
+
+}
+.biaoti{
+
+    /*font-weight:800;*/
+    /*font-size: 14px;*/
+
+    height:25px;
+    width:160px;
+    margin-right: 20px;
+    /*border-radius: 10px;*/
+}
+.biaokuang{
+    margin-top: 50px;
+}
+
+.header{
+    /*padding-bottom: 30px;*/
+    /*padding-left: 290px;*/
+    /*width:auto;*/
+    padding: 0px 50px 50px;
+}
+.biaoti3{
+    /*font-weight:800;*/
+    /*font-size: 18px;*/
+    height:25px;
+    width:85px;
+    margin-right: 60px;
+    /*border-radius: 10px;*/
+
+
+         }
+.biaoge{
+    /*font-weight:800;*/
+    /*font-size: 18px;*/
+
+    min-height:35px;
+    min-width:300px;
+      }
+
+.waibiaoge{
+    margin-top: 70px;
+    margin-left: 65px;
+    width: 700px;
+    height: 180px;
+
+          }
+.caozuo{
+    background-color: green;
+
+    color:white;
+    height:35PX;
+    width:90px;
+    /*border-radius: 10px;*/
+    align:center;
+      }
+.header{
+    margin:auto;
+}
+/*分页*/
+.page{
+    margin-top: 20px;
+    text-align: center;
+
+}
+.page a{
+    display: inline-block;
+    background: #fff 0 0 no-repeat;
+    color: #888;
+    padding: 10px;
+    min-width: 15px;
+    border: 1px solid #E2E2E2;
+
+}
+.page li{
+    /*display: inline-block;*/
+    /*float: left;*/
+    margin-right: 5px;
+    text-align: center;
+}
+#oUl li {
+    float: left;
+    margin: 0 auto;
+}
+.update {
+    margin-left: 10px;
+}
+
+
